@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamingHanz - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1><i class="fas fa-video"></i> StreamingHanz</h1>
+                <p>Admin Panel Login</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div id="loginError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-video"></i> StreamingHanz</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="videos">
+                    <i class="fas fa-film"></i>
+                    <span>Video Management</span>
+                </a>
+                <a href="#" class="nav-item" data-page="episodes">
+                    <i class="fas fa-list-ol"></i>
+                    <span>Episode Management</span>
+                </a>
+                <a href="#" class="nav-item" data-page="categories">
+                    <i class="fas fa-tags"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="nav-item" data-page="ads">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Management</span>
+                </a>
+                <a href="#" class="nav-item" data-page="database">
+                    <i class="fas fa-database"></i>
+                    <span>Database</span>
+                </a>
+                <a href="#" class="nav-item" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="user-info">
+                    <span><i class="fas fa-user"></i> Admin</span>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-film"></i>
+                            <div>
+                                <h3 id="totalVideos">0</h3>
+                                <p>Total Videos</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-list-ol"></i>
+                            <div>
+                                <h3 id="totalEpisodes">0</h3>
+                                <p>Total Episodes</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-eye"></i>
+                            <div>
+                                <h3 id="totalViews">0</h3>
+                                <p>Total Views</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-ad"></i>
+                            <div>
+                                <h3 id="totalAds">0</h3>
+                                <p>Active Ads</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-section">
+                        <h2>Recent Videos</h2>
+                        <div id="recentVideos" class="recent-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Video Management Page -->
+                <div id="videosPage" class="page" style="display: none;">
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddVideoModal()">
+                            <i class="fas fa-plus"></i> Add New Video
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="videosTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Thumbnail</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th>Premium</th>
+                                    <th>Views</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="videosTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Episode Management Page -->
+                <div id="episodesPage" class="page" style="display: none;">
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddSeasonModal()">
+                            <i class="fas fa-plus"></i> Add Season
+                        </button>
+                        <button class="btn btn-secondary" onclick="showAddEpisodeModal()">
+                            <i class="fas fa-plus"></i> Add Episode
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="episodesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Video</th>
+                                    <th>Season</th>
+                                    <th>Episode</th>
+                                    <th>Title</th>
+                                    <th>Premium</th>
+                                    <th>Views</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="episodesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Categories Page -->
+                <div id="categoriesPage" class="page" style="display: none;">
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddCategoryModal()">
+                            <i class="fas fa-plus"></i> Add Category
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="categoriesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Slug</th>
+                                    <th>Video Count</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Ad Management Page -->
+                <div id="adsPage" class="page" style="display: none;">
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddAdModal()">
+                            <i class="fas fa-plus"></i> Add Advertisement
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="adsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Network</th>
+                                    <th>Type</th>
+                                    <th>Position</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Database Page -->
+                <div id="databasePage" class="page" style="display: none;">
+                    <div class="database-actions">
+                        <button class="btn btn-primary" onclick="installDatabase()">
+                            <i class="fas fa-download"></i> Install Database
+                        </button>
+                        <button class="btn btn-secondary" onclick="testConnection()">
+                            <i class="fas fa-plug"></i> Test Connection
+                        </button>
+                    </div>
+                    <div id="databaseStatus" class="database-status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Video Modal -->
+    <div id="addVideoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Video</h2>
+                <span class="close" onclick="closeModal('addVideoModal')">&times;</span>
+            </div>
+            <form id="addVideoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type *</label>
+                        <select name="type" required>
+                            <option value="movie">Movie</option>
+                            <option value="series">Series</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category_id" id="videoCategorySelect">
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Release Year</label>
+                        <input type="number" name="release_year" min="1900" max="2030">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" name="duration" placeholder="e.g., 120 min">
+                    </div>
+                    <div class="form-group">
+                        <label>Rating</label>
+                        <input type="number" name="rating" step="0.1" min="0" max="10">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Trailer URL</label>
+                        <input type="url" name="trailer_url">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" name="is_premium"> Premium Content
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Ads to Unlock</label>
+                        <input type="number" name="ads_to_unlock" min="0" value="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Thumbnail</label>
+                        <input type="file" name="thumbnail" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Poster</label>
+                        <input type="file" name="poster" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addVideoModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Video</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Season Modal -->
+    <div id="addSeasonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Season</h2>
+                <span class="close" onclick="closeModal('addSeasonModal')">&times;</span>
+            </div>
+            <form id="addSeasonForm">
+                <div class="form-group">
+                    <label>Video (Series) *</label>
+                    <select name="video_id" id="seasonVideoSelect" required>
+                        <option value="">Select Series</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Season Number *</label>
+                        <input type="number" name="season_number" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Poster URL</label>
+                    <input type="url" name="poster_url">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addSeasonModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Season</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Episode Modal -->
+    <div id="addEpisodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Episode</h2>
+                <span class="close" onclick="closeModal('addEpisodeModal')">&times;</span>
+            </div>
+            <form id="addEpisodeForm">
+                <div class="form-group">
+                    <label>Video (Series) *</label>
+                    <select name="video_id" id="episodeVideoSelect" required>
+                        <option value="">Select Series</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Season *</label>
+                    <select name="season_id" id="episodeSeasonSelect" required>
+                        <option value="">Select Season</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Episode Number *</label>
+                        <input type="number" name="episode_number" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" name="title" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Video URL (Embed) *</label>
+                    <input type="url" name="video_url" required placeholder="https://example.com/embed/video">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" name="duration" placeholder="e.g., 45 min">
+                    </div>
+                    <div class="form-group">
+                        <label>Thumbnail</label>
+                        <input type="file" name="thumbnail" accept="image/*">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" name="is_premium"> Premium Episode
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Ads to Unlock</label>
+                        <input type="number" name="ads_to_unlock" min="0" value="0">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addEpisodeModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Episode</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div id="addCategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Category</h2>
+                <span class="close" onclick="closeModal('addCategoryModal')">&times;</span>
+            </div>
+            <form id="addCategoryForm">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Slug *</label>
+                    <input type="text" name="slug" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addCategoryModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Ad Modal -->
+    <div id="addAdModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Advertisement</h2>
+                <span class="close" onclick="closeModal('addAdModal')">&times;</span>
+            </div>
+            <form id="addAdForm">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ad Network</label>
+                        <select name="ad_network_id" id="adNetworkSelect">
+                            <option value="">Select Network</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ad Type *</label>
+                        <select name="ad_type" required>
+                            <option value="">Select Type</option>
+                            <option value="banner">Banner</option>
+                            <option value="interstitial">Interstitial</option>
+                            <option value="rewarded">Rewarded</option>
+                            <option value="preroll">Pre-roll Video</option>
+                            <option value="midroll">Mid-roll Video</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ad Code *</label>
+                    <textarea name="ad_code" rows="4" required placeholder="Paste your ad code here (HTML/JavaScript)"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" name="position" placeholder="e.g., header, footer, player">
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <input type="number" name="priority" min="1" value="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addAdModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Ad</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
