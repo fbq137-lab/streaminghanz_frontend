@@ -1,0 +1,16 @@
+{
+  "name": "streaminghanz-frontend",
+  "version": "1.0.0",
+  "description": "Frontend mobile streaming untuk StreamingHanz",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 -c-1",
+    "dev": "npx http-server -p 3000 -c-1 -o"
+  },
+  "keywords": ["streaming", "mobile", "video", "player"],
+  "author": "StreamingHanz",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

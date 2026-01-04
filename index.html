@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamingHanz - Nonton Film & Series</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <i class="fas fa-play-circle"></i>
+            <h1>StreamingHanz</h1>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-play-circle"></i> StreamingHanz</h1>
+                <div class="header-actions">
+                    <button class="search-btn" onclick="showSearch()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div id="searchBar" class="search-bar" style="display: none;">
+            <div class="search-input-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari film, series, atau episode..." />
+                <button onclick="hideSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Page -->
+            <div id="homePage" class="page">
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="hero-slider" id="heroSlider">
+                        <!-- Hero items will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Featured Content -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-star"></i> Premium Content</h2>
+                        <a href="#" class="see-all" onclick="showCategory('premium')">Lihat Semua</a>
+                    </div>
+                    <div class="content-slider" id="featuredContent">
+                        <!-- Featured items will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Latest Movies -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-film"></i> Film Terbaru</h2>
+                        <a href="#" class="see-all" onclick="showCategory('movies')">Lihat Semua</a>
+                    </div>
+                    <div class="content-slider" id="latestMovies">
+                        <!-- Latest movies will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Popular Series -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-tv"></i> Series Populer</h2>
+                        <a href="#" class="see-all" onclick="showCategory('series')">Lihat Semua</a>
+                    </div>
+                    <div class="content-slider" id="popularSeries">
+                        <!-- Popular series will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Categories -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-tags"></i> Kategori</h2>
+                    </div>
+                    <div class="categories-grid" id="categoriesGrid">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Category Page -->
+            <div id="categoryPage" class="page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn" onclick="showHome()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="categoryTitle">Kategori</h2>
+                </div>
+                <div class="content-grid" id="categoryContent">
+                    <!-- Category content will be loaded here -->
+                </div>
+                <div id="loadingMore" class="loading-more" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <span>Loading...</span>
+                </div>
+            </div>
+
+            <!-- Detail Page -->
+            <div id="detailPage" class="page" style="display: none;">
+                <div class="detail-header">
+                    <button class="back-btn" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="share-btn" onclick="shareContent()">
+                        <i class="fas fa-share"></i>
+                    </button>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-poster">
+                        <img id="detailPoster" src="" alt="">
+                        <button class="play-btn" onclick="watchContent()">
+                            <i class="fas fa-play"></i>
+                            <span>Nonton Sekarang</span>
+                        </button>
+                    </div>
+                    <div class="detail-info">
+                        <h1 id="detailTitle"></h1>
+                        <div class="detail-meta">
+                            <span id="detailType"></span>
+                            <span id="detailYear"></span>
+                            <span id="detailDuration"></span>
+                            <span id="detailRating"></span>
+                        </div>
+                        <div class="detail-tags">
+                            <span id="detailCategory"></span>
+                            <span id="detailPremium" class="premium-tag" style="display: none;">Premium</span>
+                        </div>
+                        <p id="detailDescription"></p>
+                        <div class="detail-stats">
+                            <span><i class="fas fa-eye"></i> <span id="detailViews">0</span> views</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Seasons Section (for series) -->
+                    <div id="seasonsSection" class="seasons-section" style="display: none;">
+                        <h3>Seasons</h3>
+                        <div class="seasons-list" id="seasonsList">
+                            <!-- Seasons will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Page -->
+            <div id="playerPage" class="page" style="display: none;">
+                <div class="player-header">
+                    <button class="back-btn" onclick="exitPlayer()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="player-title">
+                        <h3 id="playerTitle"></h3>
+                        <p id="playerSubtitle"></p>
+                    </div>
+                </div>
+                
+                <!-- Ad Overlay -->
+                <div id="adOverlay" class="ad-overlay" style="display: none;">
+                    <div class="ad-content">
+                        <div class="ad-info">
+                            <h3>Iklan</h3>
+                            <p id="adCountdown">Menyiapkan iklan...</p>
+                        </div>
+                        <div id="adContainer" class="ad-container">
+                            <!-- Ad will be loaded here -->
+                        </div>
+                        <div class="ad-progress">
+                            <div class="progress-bar">
+                                <div id="adProgress" class="progress-fill"></div>
+                            </div>
+                            <span id="adProgressText">0/0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unlock Overlay -->
+                <div id="unlockOverlay" class="unlock-overlay" style="display: none;">
+                    <div class="unlock-content">
+                        <i class="fas fa-lock"></i>
+                        <h3>Konten Premium Terkunci</h3>
+                        <p>Tonton <span id="adsRequired">0</span> iklan untuk membuka konten ini</p>
+                        <div class="unlock-progress">
+                            <span>Progress: <span id="adsWatched">0</span> / <span id="adsTotal">0</span></span>
+                            <div class="progress-bar">
+                                <div id="unlockProgress" class="progress-fill"></div>
+                            </div>
+                        </div>
+                        <button class="btn-watch-ad" onclick="watchAd()">
+                            <i class="fas fa-play"></i>
+                            Tonton Iklan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Video Player -->
+                <div class="video-container">
+                    <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <!-- Player Controls -->
+                <div class="player-controls">
+                    <button class="control-btn" onclick="togglePlay()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="videoProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <button class="control-btn" onclick="toggleFullscreen()">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Results Page -->
+            <div id="searchPage" class="page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn" onclick="showHome()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Hasil Pencarian</h2>
+                </div>
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will be loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="showHome()">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showCategory('movies')">
+                <i class="fas fa-film"></i>
+                <span>Film</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showCategory('series')">
+                <i class="fas fa-tv"></i>
+                <span>Series</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showWatchHistory()">
+                <i class="fas fa-history"></i>
+                <span>Riwayat</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
